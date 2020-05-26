@@ -531,12 +531,10 @@ long updateCRC(unsigned long CRC, const char *buffer, long count)
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
     BOOL readSuccess = NO;
-    NSString *fileContents = [[NSString alloc] initWithData:data
-												   encoding:NSUTF8StringEncoding];
-	if (!fileContents) // Also try Unicode if UTF8 fails
-			fileContents = [[NSString alloc] initWithData:data
-												 encoding:NSUnicodeStringEncoding];
-	
+
+    NSStringEncoding encoding = [NSString stringEncodingForData:data encodingOptions:nil convertedString:nil usedLossyConversion:nil];
+    NSString *fileContents = [[NSString alloc] initWithData:data encoding:encoding];
+
     if (fileContents) {
         readSuccess = YES;
 		[self parseSFV:fileContents];
